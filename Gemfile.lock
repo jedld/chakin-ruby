@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    chakin-rb (0.1.1)
+    chakin-rb (0.1.2)
       daru
       ruby-progressbar
 

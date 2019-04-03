@@ -6,6 +6,12 @@ require 'net/http'
 require 'fileutils'
 
 module Chakin
+  class HttpRedirect < StandardError
+    attr_reader :new_url
+    def initialize(new_url)
+      @new_url = new_url
+    end
+  end
   class Error < StandardError; end
   module Downloader
     def load_datasets(path = File.join(__dir__, 'datasets.csv'))
@@ -26,33 +32,47 @@ module Chakin
       url = row['URL']
       raise 'The word vector you specified was not found. Please specify correct name.' if url.nil?
 
-      progressbar = ProgressBar.create
+
       file_name = url.split('/')[-1]
 
       FileUtils.mkdir_p(save_dir) unless File.exist?(save_dir)
 
       save_path = File.join(save_dir, file_name)
+      begin
+        download_file(save_path, url)
+      rescue Chakin::HttpRedirect => e
+        download_file(save_path, e.new_url)
+      end
+      save_path
+    end
+
+    def download_file(save_path, url)
+      progressbar = ProgressBar.create
 
       f = File.open(save_path, 'wb')
       begin
         my_uri = URI.parse(url)
+        http = Net::HTTP.new(my_uri.host, my_uri.port)
 
-        Net::HTTP.start(my_uri.host) do |http|
-          http.request_get(my_uri.path) do |resp|
-            total_size = resp.content_length
-            progressbar.total = total_size
+        if my_uri.instance_of?(URI::HTTPS)
+          http.use_ssl = true
+        end
 
-            resp.read_body do |segment|
-              progressbar.progress += segment.size
-              f.write(segment)
-            end
+        http.request_get(my_uri.path) do |resp|
+          total_size = resp.content_length
+          progressbar.total = total_size
+
+          if resp.code == "302"
+            raise HttpRedirect.new(resp.header['Location'])
+          end
+          resp.read_body do |segment|
+            progressbar.progress += segment.size
+            f.write(segment)
           end
         end
       ensure
         f.close
       end
-
-      save_path
     end
 
     def search(lang = '')

@@ -8,6 +8,6 @@ RSpec.describe Chakin do
   end
 
   it "downloads word vectors" do
-    Chakin::Vectors.download(number: 17, save_dir: './')
+    Chakin::Vectors.download(number: 2, save_dir: './')
   end
 end
