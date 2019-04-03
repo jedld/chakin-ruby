@@ -1,15 +1,17 @@
-# Chakin::Ruby
+# Chakin-rb
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/chakin/ruby`. To experiment with that code, run `bin/console` for an interactive prompt.
+A port of the python chakin library that downloads pre-trained word vectors without much fuss.
 
-TODO: Delete this and the text above, and describe your gem
+This gem is a port of https://github.com/chakki-works/chakin
+
+Which makes selecting and downloading pre trained word vectors super easy
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'chakin-ruby'
+gem 'chakin-rb'
 ```
 
 And then execute:
@@ -22,7 +24,36 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Get a list of available datasets
+
+```ruby
+require "chakin-rb/chakin"
+
+Chakin::Vectors.search('English')
+=>
+#<Daru::DataFrame(12x7)>
+                  Name  Dimension     Corpus Vocabulary     Method   Language     Author
+          2 fastText(e        300  Wikipedia       2.5M   fastText    English   Facebook
+         11 GloVe.6B.5         50 Wikipedia+       400K      GloVe    English   Stanford
+         12 GloVe.6B.1        100 Wikipedia+       400K      GloVe    English   Stanford
+         13 GloVe.6B.2        200 Wikipedia+       400K      GloVe    English   Stanford
+         14 GloVe.6B.3        300 Wikipedia+       400K      GloVe    English   Stanford
+         15 GloVe.42B.        300 Common Cra       1.9M      GloVe    English   Stanford
+         16 GloVe.840B        300 Common Cra       2.2M      GloVe    English   Stanford
+         17 GloVe.Twit         25 Twitter(27       1.2M      GloVe    English   Stanford
+         18 GloVe.Twit         50 Twitter(27       1.2M      GloVe    English   Stanford
+         19 GloVe.Twit        100 Twitter(27       1.2M      GloVe    English   Stanford
+         20 GloVe.Twit        200 Twitter(27       1.2M      GloVe    English   Stanford
+         21 word2vec.G        300 Google New       3.0M   word2vec    English     Google
+```
+
+Download a dataset locally
+
+```ruby
+require "chakin-rb/chakin"
+
+Chakin::Vectors.download(number: 2, save_dir: './') # select fastText(en)
+```
 
 ## Development
 

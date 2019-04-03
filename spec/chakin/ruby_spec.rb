@@ -1,9 +1,13 @@
-RSpec.describe Chakin::Ruby do
+RSpec.describe Chakin do
   it "has a version number" do
-    expect(Chakin::Ruby::VERSION).not_to be nil
+    expect(Chakin::VERSION).not_to be nil
   end
 
-  it "does something useful" do
-    expect(false).to eq(true)
+  it "prints word vectors" do
+    Chakin::Vectors.search('English')
+  end
+
+  it "downloads word vectors" do
+    Chakin::Vectors.download(number: 2, save_dir: './')
   end
 end
