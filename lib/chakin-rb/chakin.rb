@@ -3,6 +3,7 @@ require 'csv'
 require 'daru'
 require 'ruby-progressbar'
 require 'net/http'
+require 'fileutils'
 
 module Chakin
   class Error < StandardError; end
@@ -28,7 +29,7 @@ module Chakin
       progressbar = ProgressBar.create
       file_name = url.split('/')[-1]
 
-      File.mkdir(save_dir) unless File.exist?(save_dir)
+      FileUtils.mkdir_p(save_dir) unless File.exist?(save_dir)
 
       save_path = File.join(save_dir, file_name)
 

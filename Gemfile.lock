@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    chakin-rb (0.1.0)
+    chakin-rb (0.1.1)
       daru
       ruby-progressbar
 
@@ -44,11 +44,11 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler (~> 1.17)
+  bundler
   chakin-rb!
   pry-byebug
   rake (~> 10.0)
   rspec (~> 3.0)
 
 BUNDLED WITH
-   1.17.2
+   2.0.1
